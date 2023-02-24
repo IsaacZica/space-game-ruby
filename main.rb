@@ -15,7 +15,6 @@ class Tutorial < Gosu::Window
     self.caption = "Jogo da navinha"
 
     #CursoRubyTestes\gosu\jogo_navinha\media\space.png
-    $stars = []
 
     $enemies = []
     $asteroids = []
@@ -24,9 +23,7 @@ class Tutorial < Gosu::Window
     $player = Player.new
 
     $player.warp(WIDTH / 2 , HEIGHT / 2)
-    for i in 0..100 do
-      $stars.push(Star.new)
-    end
+    @stars = Array.new(100).map { Star.new }
   end
 
   def update
@@ -46,9 +43,7 @@ class Tutorial < Gosu::Window
       e.update
     end
 
-    for i in 0..$stars.size-1 do
-      $stars[i].update($player.vel_x, $player.vel_y, $player.angle)
-    end
+    @stars.each { |s| s.update($player.vel_x, $player.vel_y) }
 
     $asteroids.each do |a|
       $asteroids.delete(a) if a.dead
@@ -64,13 +59,13 @@ class Tutorial < Gosu::Window
     #########################################################
     $enemies.each { |e| e.draw }
 
-    $stars.each { |s| s.draw }
+    @stars.each { |s| s.draw }
 
     for i in 0..$asteroids.size-1 do
       $asteroids[i].draw
     end
 
-    
+
   end
 end
 
