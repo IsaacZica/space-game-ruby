@@ -109,7 +109,11 @@ class Player < Ship
 
 
         @projectiles.each do |p|
-            @projectiles.delete(p) if p.is_dead
+            if p.border_collided
+                @projectiles.delete(p)
+                next
+            end
+            
             p.update
 
             $asteroids.each do |a|

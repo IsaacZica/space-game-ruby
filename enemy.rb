@@ -129,19 +129,23 @@ class Enemy < Ship
             shot if @shot_cooldown <= 0
         end
 
-        move
+        #move
         @shot_cooldown -= 1
 
         @projectiles.each do |p|
-            @projectiles.delete(p) if p.is_dead
+            if p.border_collided
+                @projectiles.delete(p)
+                next
+            end
+
             p.update
 
-            if Utils.is_colliding(p.x,p.y,$player.x,$player.y,25,25)
+            if Utils.is_colliding(p.x, p.y, $player.x, $player.y, 25, 25)
                 $player.take_damage(p.damage)
                 @projectiles.delete(p)
             end
             $asteroids.each do |a|
-                if Utils.is_colliding(p.x,p.y,a.x,a.y,a.width/2,a.height/2)
+                if Utils.is_colliding(p.x, p.y, a.x, a.y, a.width / 2, a.height / 2)
                     a.take_damage(p.damage)
                     @projectiles.delete(p)
                 end
