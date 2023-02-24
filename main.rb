@@ -5,21 +5,20 @@ require_relative 'star'
 require_relative 'asteroid'
 require_relative 'enemy'
 
-WIDTH, HEIGHT = 1280, 720
-
+WIDTH = 1280
+HEIGHT = 720
 
 class Tutorial < Gosu::Window
   attr_accessor :projectiles
+
   def initialize
     super WIDTH, HEIGHT
+    @background_image = Gosu::Image.new("media\\background2.png", :tileable => true)
     self.caption = "Jogo da navinha"
-
-    #CursoRubyTestes\gosu\jogo_navinha\media\space.png
 
     $enemies = []
     $asteroids = []
 
-    @background_image = Gosu::Image.new("media\\background2.png", :tileable => true)
     $player = Player.new
 
     $player.warp(WIDTH / 2 , HEIGHT / 2)
@@ -39,33 +38,30 @@ class Tutorial < Gosu::Window
     $player.update
     ####################################################
     $enemies.each do |e|
-      $enemies.delete(e) if e.dead
+      if e.dead
+        $enemies.delete(e)
+        next
+      end
       e.update
     end
 
     @stars.each { |s| s.update($player.vel_x, $player.vel_y) }
 
     $asteroids.each do |a|
-      $asteroids.delete(a) if a.dead
+      if a.dead
+        $asteroids.delete(a)
+        next
+      end
       a.update
     end
   end
 
   def draw
-    # ...
     @background_image.draw(0, 0, 0, 1, 1)
-
     $player.draw
-    #########################################################
     $enemies.each { |e| e.draw }
-
     @stars.each { |s| s.draw }
-
-    for i in 0..$asteroids.size-1 do
-      $asteroids[i].draw
-    end
-
-
+    $asteroids.each { |s| s.draw }
   end
 end
 

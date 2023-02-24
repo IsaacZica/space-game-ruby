@@ -69,13 +69,14 @@ class Ship
     @vel_y *= 0.99
   end
 
-  def collision
+  def collision_update
     @projectiles.each_with_index do |p, i|
-      next unless p.border_collided == true
-
-      # puts "#{p.class} Colidiu na borda..."
-      @projectiles.delete_at(i)
-      next
+      if p.border_collided == true
+        # puts "#{p.class} Colidiu na borda..."
+        @projectiles.delete_at(i)
+        next
+      end
+      p.update
     end
   end
 
@@ -90,8 +91,7 @@ class Ship
   def update
     move
     propulsion_calc
-    @projectiles.each { |p| p.update }
-    collision
+    collision_update
     is_dead
   end
 
@@ -100,5 +100,4 @@ class Ship
     @image.draw_rot(@x, @y, 1, @angle)
     @projectiles.each { |p| p.draw }
   end
-
 end

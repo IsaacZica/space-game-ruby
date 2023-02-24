@@ -1,5 +1,6 @@
 require 'gosu'
 require_relative 'projectile'
+require_relative 'collision'
 require_relative 'missile'
 require_relative 'utils'
 require_relative 'ship'
@@ -35,7 +36,6 @@ class Player < Ship
             @projectiles.push(Missile.new(@x, @y, @angle, false))
             @missile_cooldown = 120
         end
-
     end
 
     def warp (x,y)
@@ -51,6 +51,7 @@ class Player < Ship
         @angle += 3.5
         @angle -= 360 if @angle >= 360
     end
+
 
     def accelerate
         @vel_x += Gosu.offset_x(@angle, 0.2)
@@ -79,13 +80,9 @@ class Player < Ship
     end
 
     def draw
-        @image.draw_rot(@x, @y, 2, @angle)
+        super
         Gosu.draw_rect(@x - @max_health/2+@max_health/3, @y + @height/2 + 10 , @max_health/3, 10, Gosu::Color::GRAY, 2)
         Gosu.draw_rect(@x - @health/2 +@health/3, @y + @height/2 + 10 , @health/3, 10, Gosu::Color::GREEN, 2)
-
-        @projectiles.each do |p|
-            p.draw
-        end
     end
 
     def controller
@@ -95,39 +92,40 @@ class Player < Ship
         shot if Gosu.button_down? Gosu::KB_SPACE and @shot_cooldown <= 0
     end
 
-    def update
-        # ...
-        @has_accelerated = false
-
-        #is_colliding_with_asteroid
-
-
-        controller
-        move
-        @shot_cooldown -= 1
-        @missile_cooldown -= 1
-
-
-        @projectiles.each do |p|
-            if p.border_collided
-                @projectiles.delete(p)
+    def collision_update
+        @projectiles.each_with_index do |p, i|
+            if p.border_collided == true
+                #puts "#{p.class} Colidiu na borda..."
+                @projectiles.delete_at(i)
                 next
             end
-            
-            p.update
 
             $asteroids.each do |a|
-                if Utils.is_colliding(p.x,p.y,a.x,a.y,a.width/2,a.height/2)
+                if Collision.colliding?(p.x, p.y , a.x, a.y, a.width / 2, a.height / 2)
                     a.take_damage(p.damage)
                     @projectiles.delete(p)
                 end
             end
+
             $enemies.each do |e|
-                if Utils.is_colliding(p.x,p.y,e.x,e.y,e.width/2,e.height/2)
+                if Collision.colliding?(p.x, p.y, e.x, e.y, e.width / 2, e.height / 2)
                     e.take_damage(p.damage)
                     @projectiles.delete(p)
                 end
             end
+            p.update
         end
+      end
+
+    def update
+        super
+        @has_accelerated = false
+
+        #is_colliding_with_asteroid
+
+        controller
+
+        @shot_cooldown -= 1
+        @missile_cooldown -= 1
     end
 end

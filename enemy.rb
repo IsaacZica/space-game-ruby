@@ -1,4 +1,4 @@
-require_relative 'utils'
+require_relative 'collision'
 require_relative 'enemy_projectile'
 require_relative 'ship'
 
@@ -140,12 +140,12 @@ class Enemy < Ship
 
             p.update
 
-            if Utils.is_colliding(p.x, p.y, $player.x, $player.y, 25, 25)
+            if Collision.colliding?(p.x, p.y, $player.x, $player.y, 25, 25)
                 $player.take_damage(p.damage)
                 @projectiles.delete(p)
             end
             $asteroids.each do |a|
-                if Utils.is_colliding(p.x, p.y, a.x, a.y, a.width / 2, a.height / 2)
+                if Collision.colliding?(p.x, p.y, a.x, a.y, a.width / 2, a.height / 2)
                     a.take_damage(p.damage)
                     @projectiles.delete(p)
                 end

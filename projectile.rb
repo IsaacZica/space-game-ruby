@@ -9,10 +9,10 @@ class Projectile
     @speed_x = @speed_y = 0.0
     @x = x + Utils.get_x_by_angle(angle, 40)
     @y = y + Utils.get_y_by_angle(angle, 40)
+    @start_x, @start_y = @x, @y
     @angle = angle
 
     @damage = 15
-    # @dead = false
     @border_collided = false
   end
 
@@ -25,7 +25,7 @@ class Projectile
     @speed_x *= 0.99
     @speed_y *= 0.99
 
-    @border_collided = Collision.border_collision(@x, @y)
+    @border_collided = Collision.border_collision?(@x, @y, @start_x, @start_y)
   end
 
   def draw
