@@ -2,14 +2,10 @@ require_relative 'projectile'
 
 class EnemyProjectiles < Projectile
 
-    def initialize(x,y,angle)
-        super(x, y, angle)
+    def initialize(position_x, position_y, angle)
+        super(position_x, position_y, angle)
         @image = Gosu::Image.new("media\\enemy_bullet.png")
         @damage = 5
-    end
-
-    def draw
-        @image.draw_rot(@x, @y, 2, @angle, 0.5, 0.5, 0.6, 0.6)
     end
 
     def update
@@ -20,5 +16,11 @@ class EnemyProjectiles < Projectile
 
         @speed_x *= 0.99
         @speed_y *= 0.99
+
+        @border_collided = Collision.border_collision?(@x, @y, @start_x, @start_y)
+    end
+
+    def draw
+        @image.draw_rot(@x, @y, 2, @angle, 0.5, 0.5, 0.6, 0.6)
     end
 end

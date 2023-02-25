@@ -4,6 +4,7 @@ require_relative 'collision'
 require_relative 'missile'
 require_relative 'utils'
 require_relative 'ship'
+require_relative 'enemy'
 
 class Player < Ship
     attr_reader :x, :y, :projectiles
@@ -101,14 +102,14 @@ class Player < Ship
             end
 
             $asteroids.each do |a|
-                if Collision.colliding?(p.x, p.y , a.x, a.y, a.width / 2, a.height / 2)
+                if Collision.colliding_obj?(p, a)
                     a.take_damage(p.damage)
                     @projectiles.delete(p)
                 end
             end
 
             $enemies.each do |e|
-                if Collision.colliding?(p.x, p.y, e.x, e.y, e.width / 2, e.height / 2)
+                if Collision.colliding_obj?(p, e)
                     e.take_damage(p.damage)
                     @projectiles.delete(p)
                 end

@@ -4,12 +4,13 @@ require_relative 'collision'
 class Projectile
   attr_reader :x, :y, :damage, :dead, :border_collided
 
-  def initialize(x, y, angle)
+  def initialize(position_x, position_y, angle)
     @image = Gosu::Image.new('media\\bullet.png')
     @speed_x = @speed_y = 0.0
-    @x = x + Utils.get_x_by_angle(angle, 40)
-    @y = y + Utils.get_y_by_angle(angle, 40)
-    @start_x, @start_y = @x, @y
+    @x = position_x + Utils.get_x_by_angle(angle, 40)
+    @y = position_y + Utils.get_y_by_angle(angle, 40)
+    @start_x = @x
+    @start_y = @y
     @angle = angle
 
     @damage = 15

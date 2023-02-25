@@ -24,8 +24,6 @@ class Asteroid
         @dot = @x * @center_x + @y * @center_y
         @det = @center_x * @y - @center_y * @x
         @speed_variability = rand(5.0..9.0)
-        #@angle = Math.atan2(@det, @dot) * 180 / Math::PI
-
 
         @vel_x = 0
         @vel_y = 0
@@ -33,7 +31,7 @@ class Asteroid
         @orientation = 0.0
         @dead = false
         @rot_speed = rand(-5..5)
-        @rot_speed += 1 if @rot_speed == 0
+        @rot_speed += 1 if @rot_speed.zero?
 
         if @id <= 7
             size = 125
@@ -60,7 +58,7 @@ class Asteroid
     def is_colliding_with_something
         $asteroids.each do |a|
 
-            if Collision.colliding?(@x, @y, a.x, a.y, a.width / 2 + @width / 2, a.height/2 + @height/2)
+            if Collision.colliding_obj?(self, a)
                 if self != a
                     if @vel_x >= a.vel_x
                         a.vel_x = @vel_x
@@ -100,8 +98,8 @@ class Asteroid
         @x += @vel_x - $player.vel_x
         @y += @vel_y - $player.vel_y
 
-        @dead = true if (@x %= WIDTH * 1.5) == 0
-        @dead = true if (@y %= HEIGHT * 1.5) == 0
+        @dead = true if (@x %= WIDTH * 1.5).zero?
+        @dead = true if (@y %= HEIGHT * 1.5).zero?
     end
 
     def take_damage(damage)

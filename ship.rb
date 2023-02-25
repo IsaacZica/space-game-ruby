@@ -1,4 +1,5 @@
 require_relative 'projectile'
+#require_relative 'player'
 
 class Ship
   attr_reader :angle, :vel_x, :vel_y, :x, :y, :projectiles

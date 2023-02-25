@@ -24,8 +24,8 @@ class Missile < Projectile
     def update
         @speed_x += Gosu.offset_x(@angle, 0.5)
         @speed_y += Gosu.offset_y(@angle, 0.5)
-        @x += @speed_x - $player.vel_x/3
-        @y += @speed_y - $player.vel_y/3
+        @x += @speed_x - $player.vel_x / 3
+        @y += @speed_y - $player.vel_y / 3
 
         @speed_x *= 1.02
         @speed_y *= 1.02
