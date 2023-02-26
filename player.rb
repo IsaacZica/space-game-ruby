@@ -115,7 +115,6 @@ class Player < Ship
             end
             p.update
         end
-      end
     end
 
     def update
