@@ -1,7 +1,7 @@
 require_relative 'utils'
 ASTEROID_VARIATION = 24
-MAX_ASTEROIDS = 10
-MAX_SPEED = 10
+MAX_ASTEROIDS = 8
+MAX_SPEED = 5
 
 class Asteroid
     attr_accessor :health, :dead, :x, :y, :width, :height, :vel_x, :vel_y
@@ -22,7 +22,7 @@ class Asteroid
         @color = Gosu::Color::YELLOW
         @dot = @x * @center_x + @y * @center_y
         @det = @center_x * @y - @center_y * @x
-        @speed_variability = rand(5.0..9.0)
+        @speed_variability = rand(3.0..4.0)
         #@angle = Math.atan2(@det, @dot) * 180 / Math::PI
 
 
@@ -58,7 +58,10 @@ class Asteroid
 
     def is_colliding_with_something
         $asteroids.each do |a|
-        
+            if Utils.is_colliding(@x, @y, $player.x, $player.y, ($player.width + @width)/2, ($player.height + @height)/2)
+                $player.stun
+            end
+
             if Utils.is_colliding(@x,@y,a.x,a.y,a.width/2 + @width/2, a.height/2 + @height/2)
                 if self != a
                     if @vel_x >= a.vel_x

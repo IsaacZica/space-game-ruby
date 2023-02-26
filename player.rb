@@ -89,10 +89,10 @@ class Player < Ship
     end
 
     def controller
-        turn_left if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT
-        turn_right if Gosu.button_down? Gosu::KB_RIGHT or Gosu::button_down? Gosu::GP_RIGHT
-        accelerate if Gosu.button_down? Gosu::KB_UP or Gosu::button_down? Gosu::GP_BUTTON_0
-        shot if Gosu.button_down? Gosu::KB_SPACE and @shot_cooldown <= 0
+        turn_left if Gosu.button_down? Gosu::KB_LEFT or Gosu::button_down? Gosu::GP_LEFT and !@stunned
+        turn_right if Gosu.button_down? Gosu::KB_RIGHT or Gosu::button_down? Gosu::GP_RIGHT and !@stunned
+        accelerate if Gosu.button_down? Gosu::KB_UP or Gosu::button_down? Gosu::GP_BUTTON_0 and !@stunned
+        shot if Gosu.button_down? Gosu::KB_SPACE and @shot_cooldown <= 0 and !@stunned
     end
 
     def update
@@ -106,7 +106,11 @@ class Player < Ship
         move
         @shot_cooldown -= 1
         @missile_cooldown -= 1
-
+        if @stunned
+            turn_right
+            @stun_time -= 1
+            @stunned = false if @stun_time <= 0
+        end
 
         @projectiles.each do |p|
             @projectiles.delete(p) if p.is_dead

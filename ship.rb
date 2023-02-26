@@ -1,8 +1,8 @@
 require_relative 'projectile'
 
 class Ship
-  attr_reader :angle, :vel_x, :vel_y, :x, :y
-
+  attr_reader :angle, :x, :y, :width, :height
+  attr_accessor :vel_x, :vel_y
   def initialize
     @x = 0.0
     @y = 0.0
@@ -13,6 +13,8 @@ class Ship
     @health = @max_health = 150
     @width = @height = 50
     @dead = false
+    @stunned = false
+    @stun_time = 0
   end
 
   def warp(x, y)
@@ -57,8 +59,9 @@ class Ship
     end
   end
 
-  def stunned
-      
+  def stun
+      @stunned = true
+      @stun_time = 90
   end
 
   def update
