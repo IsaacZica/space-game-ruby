@@ -141,11 +141,13 @@ class Enemy < Ship
             p.update
 
             if Collision.colliding?(p.x, p.y, $player.x, $player.y, 25, 25)
+
                 $player.take_damage(p.damage)
                 @projectiles.delete(p)
             end
             $asteroids.each do |a|
                 if Collision.colliding?(p.x, p.y, a.x, a.y, a.width / 2, a.height / 2)
+
                     a.take_damage(p.damage)
                     @projectiles.delete(p)
                 end

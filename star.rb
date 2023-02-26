@@ -19,3 +19,4 @@ class Star
     @image.draw(@x, @y, 0, @size, @size)
   end
 end
+

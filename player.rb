@@ -100,7 +100,6 @@ class Player < Ship
                 @projectiles.delete_at(i)
                 next
             end
-
             $asteroids.each do |a|
                 if Collision.colliding_obj?(p, a)
                     a.take_damage(p.damage)
@@ -117,6 +116,7 @@ class Player < Ship
             p.update
         end
       end
+    end
 
     def update
         super
